@@ -1,27 +1,50 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
-
-List <|-- AbstractList
-Collection <|-- AbstractCollection
-
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
-
-class ArrayList {
-Object[] elementData
-size()
+class App{
+    main()
+    start()
 }
 
-enum TimeUnit {
-DAYS
-HOURS
-MINUTES
+class Controller{
+    model: Inventory
+    obList: ObservableList<Item>
+    fileChooser: FileChooser
+
+
 }
+
+class Inventory{
+    -items: ArrayList<Item>
+
+    'constructor
+    +Inventory()
+
+}
+
+class Item{
+    'private instance variables
+    -name: SimpleStringProperty
+    -serial: SimpleStringProperty
+    -value: double
+
+    'constructor
+    +Item(String, String, Double)
+
+    'getters
+    +getName(): String
+    +getSerial(): String
+    +getValue(): double
+
+    'setters
+    +setName(String)
+    +setSerial(String)
+    +setValue(double)
+}
+
+org.javafx.Application <|- App
+App -- Controller
+Controller *-> Inventory
+Inventory *--> Item
 
 @enduml
