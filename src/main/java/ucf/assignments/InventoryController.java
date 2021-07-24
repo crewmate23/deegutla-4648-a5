@@ -55,19 +55,21 @@ public class InventoryController implements Initializable {
         serialNumberColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("serialNumber"));
         valueColumn.setCellValueFactory(new PropertyValueFactory<Item, BigDecimal>("value"));
 
-        addNewItemBtn.setOnAction(new EventHandler<ActionEvent>() {
+        addNewItemBtn.setOnAction(e -> addNewItemBtnClicked());
+        /*addNewItemBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 addNewItemBtnClicked(event);
             }
-        });
+        });*/
 
-        removeItemBtn.setOnAction(new EventHandler<ActionEvent>(){
+        removeItemBtn.setOnAction(e -> removeItemBtnClicked());
+        /*removeItemBtn.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event){
                 removeItemBtnClicked(event);
             }
-        });
+        });*/
 
         tableView.setItems(inventory.getItems());
 
@@ -75,21 +77,19 @@ public class InventoryController implements Initializable {
 
     }
 
-    public void addNewItemBtnClicked(ActionEvent actionEvent){
+    public void addNewItemBtnClicked(){
         Stage stage = new Stage();
         stage.setTitle("Add New Item");
         stage.setScene(sceneManager.getScene("AddItemScene"));
         stage.show();
     }
 
-    public void removeItemBtnClicked(ActionEvent actionEvent){
+    public void removeItemBtnClicked(){
         ObservableList<Item> selectedItems, allItems;
 
         allItems = tableView.getItems();
         selectedItems = tableView.getSelectionModel().getSelectedItems();
 
-        for(Item i: selectedItems){
-            allItems.remove(i);
-        }
+        allItems.removeAll(selectedItems);
     }
 }
