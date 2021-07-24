@@ -14,6 +14,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -35,7 +36,7 @@ public class InventoryController implements Initializable {
     @FXML
     private TableColumn<Item, String> serialNumberColumn;
     @FXML
-    private TableColumn<Item, Double> valueColumn;
+    private TableColumn<Item, BigDecimal> valueColumn;
 
 
     public InventoryController(Inventory inventory, SceneManager sceneManager){
@@ -47,7 +48,7 @@ public class InventoryController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         nameColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
         serialNumberColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("serialNumber"));
-        valueColumn.setCellValueFactory(new PropertyValueFactory<Item, Double>("value"));
+        valueColumn.setCellValueFactory(new PropertyValueFactory<Item, BigDecimal>("value"));
 
         addNewItemBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -55,6 +56,9 @@ public class InventoryController implements Initializable {
                 addNewItemBtnClicked(event);
             }
         });
+
+        tableView.setItems(inventory.getItems());
+
     }
 
     public void addNewItemBtnClicked(ActionEvent actionEvent){

@@ -8,16 +8,18 @@ package ucf.assignments;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.math.BigDecimal;
+
 public class Item {
 
     private SimpleStringProperty name;
     private SimpleStringProperty serialNumber;
-    private SimpleDoubleProperty value;
+    private BigDecimal value;
 
-    public Item(String name, String serialNumber, Double value){
+    public Item(String name, String serialNumber, BigDecimal value){
         this.name = new SimpleStringProperty(name);
         this.serialNumber = new SimpleStringProperty(serialNumber);
-        this.value = new SimpleDoubleProperty(value);
+        this.value = value;
     }
 
     public String getName() {
@@ -28,8 +30,8 @@ public class Item {
         return serialNumber.get();
     }
 
-    public Double getValue() {
-        return value.get();
+    public BigDecimal getValue() {
+        return this.value;
     }
 
     public void setName(String name) {
@@ -40,7 +42,7 @@ public class Item {
         this.serialNumber.set(serialNumber);
     }
 
-    public void setValue(Double value) {
-        this.value.set(value);
+    public void setValue(BigDecimal value) {
+        this.value = value;
     }
 }

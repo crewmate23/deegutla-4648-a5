@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.w3c.dom.Text;
 
 import java.math.BigDecimal;
@@ -36,24 +37,11 @@ public class AddItemController {
     public void addItemBtnClicked(ActionEvent actionEvent){
         String name = nameField.getText();
         String serialNumber = serialNumberField.getText();
-        Double value = 0.0;
+        BigDecimal value = null;
 
         boolean validInput = true;
 
-
-        try{
-            value = Double.parseDouble(valueField.getText());
-        }catch (NumberFormatException ex){
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setHeaderText("Invalid Value");
-            errorAlert.setContentText("Item's value price must be number and format $0.00.");
-            errorAlert.showAndWait();
-
-            clearField(nameField);
-
-            validInput = false;
-        }
-
+        //validate name field
         if(name.length() < 2 && name.length() > 256){
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setHeaderText("Invalid Name");
@@ -65,6 +53,34 @@ public class AddItemController {
             validInput = false;
         }
 
+
+        //validate value field
+        try{
+            value = new BigDecimal(valueField.getText());
+        }catch (NumberFormatException ex){
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("Invalid Value");
+            errorAlert.setContentText("Item's value price must be number and format 0.00.");
+            errorAlert.showAndWait();
+
+            clearField(valueField);
+
+            validInput = false;
+        }
+
+        if(value != null && value.scale() > 2){
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("Invalid Value");
+            errorAlert.setContentText("Please enter valid value price in format of 0.00.");
+            errorAlert.showAndWait();
+
+            clearField(valueField);
+
+            validInput = false;
+        }
+
+
+        //validate serial number field
         for(int i = 0; i < serialNumber.length(); i++){
             if(!Character.isLetterOrDigit(serialNumber.charAt(i))){
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -102,15 +118,20 @@ public class AddItemController {
             }
         }
 
-        if(BigDecimal.valueOf(value).scale() > 2){
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setHeaderText("Invalid Value");
-            errorAlert.setContentText("Please enter valid value price in format of $0.00.");
-            errorAlert.showAndWait();
+        if(validInput){
+            inventory.getItems().add(new Item(name, serialNumber, value));
 
-            clearField(valueField);
+            nameField.setPromptText("Name: ");
+            nameField.clear();
 
-            validInput = false;
+            serialNumberField.setPromptText("Serial Number: XXXXXXXXXX");
+            serialNumberField.clear();
+
+            valueField.setPromptText("Value: $0.00");
+            valueField.clear();
+
+            Stage stage = (Stage) nameField.getScene().getWindow();
+            stage.close();
         }
 
 
