@@ -21,16 +21,13 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage){
-        try{
-            Parent root = FXMLLoader.load(getClass().getResource("InventoryItems.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("InventoryItems.fxml"));
+        SceneManager sceneManager = new SceneManager();
+        sceneManager.loadScenes();
 
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-            primaryStage.setTitle("Inventory Items");
-            primaryStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Scene scene = sceneManager.getScene("InventoryScene");
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Inventory Items");
+        primaryStage.show();
     }
 }

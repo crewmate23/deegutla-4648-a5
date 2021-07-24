@@ -45,11 +45,11 @@
         </MenuBar>
     </top>
     <center>
-        <TableView prefHeight="340.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+        <TableView fx:id="tableView" prefHeight="340.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn prefWidth="208.0" text="Name" />
-                <TableColumn prefWidth="233.0" text="Serial Number" />
-                <TableColumn prefWidth="158.0" text="Value" />
+                <TableColumn fx:id="nameColumn" prefWidth="208.0" text="Name" />
+                <TableColumn fx:id="serialNumberColumn" prefWidth="233.0" text="Serial Number" />
+                <TableColumn fx:id="valueColumn" prefWidth="158.0" text="Value" />
             </columns>
             <BorderPane.margin>
                 <Insets />
@@ -59,7 +59,7 @@
    <bottom>
       <HBox prefHeight="56.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Add Item">
+            <Button fx:id="addNewItemBtn" mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Add Item">
                <HBox.margin>
                   <Insets left="10.0" top="10.0" />
                </HBox.margin>
