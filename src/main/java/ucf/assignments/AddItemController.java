@@ -20,9 +20,6 @@ public class AddItemController {
     private SceneManager sceneManager;
 
     @FXML
-    private Button addItemBtn;
-
-    @FXML
     private TextField nameField;
     @FXML
     private TextField serialNumberField;
@@ -40,6 +37,13 @@ public class AddItemController {
         BigDecimal value = null;
 
         boolean validInput = true;
+
+        if(nameField.getText() == "" || serialNumberField.getText() == "" || valueField.getText() == ""){
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("Blank Field");
+            errorAlert.setContentText("Please do not leave any field blank!");
+            errorAlert.showAndWait();
+        }
 
         //validate name field
         if(name.length() < 2 && name.length() > 256){
@@ -135,6 +139,11 @@ public class AddItemController {
         }
 
 
+    }
+
+    public void cancelBtnClicked(ActionEvent actionEvent){
+        Stage stage = (Stage) nameField.getScene().getWindow();
+        stage.close();
     }
 
     private void clearField(TextField textField){

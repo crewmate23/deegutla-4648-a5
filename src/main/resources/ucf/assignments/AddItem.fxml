@@ -22,6 +22,6 @@
          </children>
       </Pane>
       <Button fx:id="addItemBtn" layoutX="305.0" layoutY="190.0" mnemonicParsing="false" onAction="#addItemBtnClicked" prefHeight="35.0" prefWidth="117.0" text="Add Item" />
-      <Button cancelButton="true" layoutX="15.0" layoutY="190.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="117.0" text="Cancel" />
+      <Button cancelButton="true" layoutX="15.0" layoutY="190.0" mnemonicParsing="false" onAction="#cancelBtnClicked" prefHeight="35.0" prefWidth="117.0" text="Cancel" />
    </children>
 </AnchorPane>
