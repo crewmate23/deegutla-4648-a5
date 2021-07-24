@@ -4,16 +4,19 @@
  */
 package ucf.assignments;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,6 +29,8 @@ public class InventoryController implements Initializable {
 
     @FXML
     private Button addNewItemBtn;
+    @FXML
+    private Button removeItemBtn;
 
     //configure table and columns
     @FXML
@@ -57,7 +62,16 @@ public class InventoryController implements Initializable {
             }
         });
 
+        removeItemBtn.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event){
+                removeItemBtnClicked(event);
+            }
+        });
+
         tableView.setItems(inventory.getItems());
+
+        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
     }
 
@@ -66,5 +80,16 @@ public class InventoryController implements Initializable {
         stage.setTitle("Add New Item");
         stage.setScene(sceneManager.getScene("AddItemScene"));
         stage.show();
+    }
+
+    public void removeItemBtnClicked(ActionEvent actionEvent){
+        ObservableList<Item> selectedItems, allItems;
+
+        allItems = tableView.getItems();
+        selectedItems = tableView.getSelectionModel().getSelectedItems();
+
+        for(Item i: selectedItems){
+            allItems.remove(i);
+        }
     }
 }

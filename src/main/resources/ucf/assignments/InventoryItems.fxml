@@ -64,7 +64,7 @@
                   <Insets left="10.0" top="10.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Remove Item">
+            <Button fx:id="removeItemBtn" mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Remove Item">
                <HBox.margin>
                   <Insets left="10.0" top="10.0" />
                </HBox.margin>
