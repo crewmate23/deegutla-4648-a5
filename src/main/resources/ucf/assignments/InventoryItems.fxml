@@ -47,9 +47,9 @@
     <center>
         <TableView fx:id="tableView" prefHeight="340.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn fx:id="nameColumn" prefWidth="208.0" text="Name" />
-                <TableColumn fx:id="serialNumberColumn" prefWidth="233.0" text="Serial Number" />
-                <TableColumn fx:id="valueColumn" prefWidth="158.0" text="Value" />
+                <TableColumn fx:id="nameColumn" onEditCommit="#changeNameCellEvent" prefWidth="208.0" text="Name" />
+                <TableColumn fx:id="serialNumberColumn" onEditCommit="#changeSerialNumberCellEvent" prefWidth="233.0" text="Serial Number" />
+                <TableColumn fx:id="valueColumn" onEditCommit="#changeValueCellEvent" prefWidth="158.0" text="Value" />
             </columns>
             <BorderPane.margin>
                 <Insets />

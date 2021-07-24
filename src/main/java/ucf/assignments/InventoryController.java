@@ -7,12 +7,11 @@ package ucf.assignments;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
+import javafx.util.converter.BigDecimalStringConverter;
 
 
 import java.math.BigDecimal;
@@ -53,6 +52,10 @@ public class InventoryController implements Initializable {
         serialNumberColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("serialNumber"));
         valueColumn.setCellValueFactory(new PropertyValueFactory<Item, BigDecimal>("value"));
 
+        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        serialNumberColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        valueColumn.setCellFactory(TextFieldTableCell.forTableColumn(new BigDecimalStringConverter()));
+
         addNewItemBtn.setOnAction(e -> addNewItemBtnClicked());
         /*addNewItemBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -69,9 +72,12 @@ public class InventoryController implements Initializable {
             }
         });*/
 
+        //nameColumn.setOnEditCommit(e -> changeNameCellEvent());
+
         tableView.setItems(inventory.getItems());
 
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        tableView.setEditable(true);
 
     }
 
@@ -89,5 +95,59 @@ public class InventoryController implements Initializable {
         selectedItems = tableView.getSelectionModel().getSelectedItems();
 
         allItems.removeAll(selectedItems);
+    }
+
+    public void changeNameCellEvent(TableColumn.CellEditEvent edittedCell){
+        Item selectedItem = tableView.getSelectionModel().getSelectedItem();
+        selectedItem.setName(edittedCell.getNewValue().toString());
+    }
+
+    public void changeSerialNumberCellEvent(TableColumn.CellEditEvent edittedCell){
+        Item selectedItem = tableView.getSelectionModel().getSelectedItem();
+        String oldSerialNumber = selectedItem.getSerialNumber();
+        String newSerialNumber = edittedCell.getNewValue().toString();
+
+        for(Item item : inventory.getItems()){
+            if(newSerialNumber.equals(item.getSerialNumber()) && !(item.equals(selectedItem))){
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setHeaderText("Serial Number Exists");
+                errorAlert.setContentText("This serial number already exists in the inventory.");
+                errorAlert.showAndWait();
+
+                newSerialNumber = oldSerialNumber;
+                //serialNumberColumn.setEditable(false);
+            }
+        }
+
+        selectedItem.setSerialNumber(newSerialNumber);
+        tableView.refresh();
+
+    }
+
+    public void changeValueCellEvent (TableColumn.CellEditEvent edittedCell){
+        Item selectedItem = tableView.getSelectionModel().getSelectedItem();
+        BigDecimal oldValue = selectedItem.getValue();
+        BigDecimal newValue;
+
+        //validate value field
+        try{
+            newValue = new BigDecimal(edittedCell.getNewValue().toString());
+        } catch (NumberFormatException ex){
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("Invalid Value");
+            errorAlert.setContentText("Item's value price must be number and format 0.00.");
+            errorAlert.showAndWait();
+
+            newValue = oldValue;
+        }
+
+        /*String regex = "\\d+";
+        if(!edittedCell.getNewValue().toString().matches(regex)){
+            selectedItem.setValue(oldValue);
+        }else{
+            selectedItem.setValue(new BigDecimal(edittedCell.getNewValue().toString()));
+        }*/
+
+        selectedItem.setValue(newValue);
     }
 }
