@@ -1,4 +1,4 @@
 package ucf.assignments;
 
-public class Controller {
+public class Inventory {
 }

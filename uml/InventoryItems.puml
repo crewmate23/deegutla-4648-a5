@@ -6,19 +6,54 @@ class App{
     start()
 }
 
-class Controller{
+class SceneManager{
+    -scenes: Map<String, Scene>
+
+    +loadScenes()
+    +getScene(String): Scene
+}
+
+class InventoryController{
     model: Inventory
-    obList: ObservableList<Item>
+    scene: SceneManager
+    fileManager: FileManager
     fileChooser: FileChooser
+
+    'add item btn
+    +addItemBtnClicked(ActionEvent event)
+    'remove item btn
+    +removeItemBtnClicked(ActionEvent event)
+    'search btn
+    +searchBtnClicked(ActionEvent event)
+
+    'edit table
+    +edit(ActionEvent event)
+
+    'file manager functions
+    +saveAsClicked(ActionEvent event)
+    +loadClicked(ActionEvent event)
+
 
 
 }
 
+class AddItemController{
+    model: Inventory
+    scene: SceneManager
+
+    'add item btn
+    +addItemBtnClicked(ActionEvent event)
+}
+
 class Inventory{
-    -items: ArrayList<Item>
+    -items: ObservableList<Item>
 
     'constructor
     +Inventory()
+    'getter
+    +getItems(): ObservableList<Item>
+    'setter
+    +setItems(ObservableList<Item>
 
 }
 
@@ -26,7 +61,7 @@ class Item{
     'private instance variables
     -name: SimpleStringProperty
     -serial: SimpleStringProperty
-    -value: double
+    -value: SimpleDoubleProperty
 
     'constructor
     +Item(String, String, Double)
@@ -42,9 +77,28 @@ class Item{
     +setValue(double)
 }
 
+class FileManager{
+    'constructor
+    +FileManager()
+
+    'save
+    +saveAsTSV(File, Inventory)
+    +saveAsHTML(File, Inventory)
+    +saveAsJSON(File, Inventory)
+
+    'load
+    +loadTSV(File): Inventory
+    +loadHTML(File): Inventory
+    +loadJSON(File): Inventory
+}
+
 org.javafx.Application <|- App
-App -- Controller
-Controller *-> Inventory
+App -- SceneManager
+SceneManager -- InventoryController
+InventoryController -- FileManager
+SceneManager -- AddItemController
+InventoryController *-> Inventory
+AddItemController *--> Inventory
 Inventory *--> Item
 
 @enduml

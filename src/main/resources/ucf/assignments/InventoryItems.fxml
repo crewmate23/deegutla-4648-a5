@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -10,23 +11,18 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="416.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <top>
         <MenuBar prefHeight="36.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Save" />
-                        <MenuItem mnemonicParsing="false" text="Load" />
+                        <MenuItem mnemonicParsing="false" text="Save As..." />
+                        <MenuItem mnemonicParsing="false" text="Load..." />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Close" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Add" />
-                        <MenuItem mnemonicParsing="false" text="Delete" />
+                        <MenuItem mnemonicParsing="false" text="Quit" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="View">
@@ -36,24 +32,47 @@
                         <CheckMenuItem mnemonicParsing="false" text="Sort by Value" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Search">
-                    <graphic>
+            <Menu mnemonicParsing="false" text="Find">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Search">
+                     <graphic>
                         <TextField />
-                    </graphic>
-                </Menu>
+                     </graphic>
+                  </MenuItem>
+               </items>
+            </Menu>
             </menus>
         </MenuBar>
     </top>
     <center>
         <TableView prefHeight="340.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn prefWidth="150.0" text="Value" />
-                <TableColumn prefWidth="221.0" text="Serial Number" />
-                <TableColumn prefWidth="228.0" text="Name" />
+                <TableColumn prefWidth="208.0" text="Name" />
+                <TableColumn prefWidth="233.0" text="Serial Number" />
+                <TableColumn prefWidth="158.0" text="Value" />
             </columns>
             <BorderPane.margin>
                 <Insets />
             </BorderPane.margin>
         </TableView>
     </center>
+   <bottom>
+      <HBox prefHeight="56.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Add Item">
+               <HBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Remove Item">
+               <HBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+         <BorderPane.margin>
+            <Insets top="10.0" />
+         </BorderPane.margin>
+      </HBox>
+   </bottom>
 </BorderPane>

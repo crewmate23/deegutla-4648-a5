@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="239.0" prefWidth="435.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextField layoutX="15.0" layoutY="85.0" prefHeight="35.0" prefWidth="407.0" promptText="Name:" />
+      <TextField layoutX="15.0" layoutY="131.0" prefHeight="35.0" prefWidth="219.0" promptText="Serial Number: XXXXXXXXXX" />
+      <TextField layoutX="243.0" layoutY="131.0" prefHeight="35.0" prefWidth="179.0" promptText="Value: $0.00" />
+      <Pane prefHeight="60.0" prefWidth="436.0" style="-fx-background-color: #0240f0;">
+         <children>
+            <Text fill="WHITE" layoutX="14.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add an Item">
+               <font>
+                  <Font size="33.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+      <Button layoutX="305.0" layoutY="190.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="117.0" text="Add Item" />
+      <Button cancelButton="true" layoutX="15.0" layoutY="190.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="117.0" text="Cancel" />
+   </children>
+</AnchorPane>
