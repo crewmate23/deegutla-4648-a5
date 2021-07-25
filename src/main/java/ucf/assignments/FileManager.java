@@ -4,16 +4,16 @@
  */
 package ucf.assignments;
 
+import com.google.gson.*;
+import com.google.gson.stream.JsonWriter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.stream.Collectors;
 
 public class FileManager {
 
@@ -88,6 +88,26 @@ public class FileManager {
     }
 
     public void saveAsJSON(){
+
+        Gson gson = new Gson();
+
+        try {
+            JsonWriter writer = new JsonWriter(new FileWriter(file));
+
+            writer.beginObject().name("inventory").beginArray();
+
+            for(Item item : inventory.getItems()){
+                writer.beginObject().name("name").value(item.getName());
+                writer.name("serial number").value(item.getSerialNumber());
+                writer.name("value").value(String.valueOf(item.getValue())).endObject();
+            }
+
+            writer.endArray().endObject().flush();
+
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -167,10 +187,28 @@ public class FileManager {
     }
 
     public ObservableList<Item> loadJSON(){
-return null;
+        ObservableList<Item> fileItems = FXCollections.observableArrayList();
+
+        try {
+            JsonElement readElement = JsonParser.parseReader(new FileReader(file));
+            JsonObject readObject = readElement.getAsJsonObject();
+
+            JsonArray jsonInventory = readObject.get("inventory").getAsJsonArray();
+
+            for(JsonElement itemElement : jsonInventory){
+                JsonObject itemJsonObject = itemElement.getAsJsonObject();
+
+                String name = itemJsonObject.get("name").getAsString();
+                String serialNumber = itemJsonObject.get("serial number").getAsString();
+                BigDecimal value = itemJsonObject.get("value").getAsBigDecimal();
+
+                fileItems.add(new Item(name, serialNumber, value));
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return fileItems;
     }
 }
-
-    /*String fileDataString = Files.readAllLines(Paths.get(fileName), Charset.forName("UTF-8")).stream().collect(Collectors.joining("\n"));
-
-    String title = StringUtils.substringBetween(fileDataString, "<title>", "</title>"));*/
