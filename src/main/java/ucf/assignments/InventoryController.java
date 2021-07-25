@@ -259,7 +259,7 @@ public class InventoryController implements Initializable {
         //List<String> searchWordsArray = Arrays.asList(search.trim().split(" "));
 
         tableView.getItems().stream()
-                .filter(item -> item.getName().equals(search))
+                .filter(item -> item.getName().contains(search))
                 .findAny()
                 .ifPresent(item -> {
                     tableView.getSelectionModel().select(item);
@@ -267,7 +267,7 @@ public class InventoryController implements Initializable {
                 });
 
         tableView.getItems().stream()
-                .filter(item -> item.getSerialNumber().equals(search))
+                .filter(item -> item.getSerialNumber().contains(search))
                 .findAny()
                 .ifPresent(item -> {
                     tableView.getSelectionModel().select(item);
