@@ -46,6 +46,10 @@ public class InventoryController implements Initializable {
     @FXML
     private MenuItem saveBtn;
     @FXML
+    private MenuItem loadBtn;
+    @FXML
+    private MenuItem newBtn;
+    @FXML
     private TextField searchField;
 
     //configure table and columns
@@ -89,6 +93,10 @@ public class InventoryController implements Initializable {
         searchBtn.setOnAction(e -> searchBtnClicked());
 
         saveBtn.setOnAction(e -> saveBtnClicked());
+
+        loadBtn.setOnAction(e -> loadBtnClicked());
+
+        newBtn.setOnAction(e -> newBtnClicked());
         /*removeItemBtn.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event){
@@ -141,6 +149,11 @@ public class InventoryController implements Initializable {
 
     }
 
+    public void newBtnClicked(){
+        inventory.getItems().removeAll();
+        tableView.refresh();
+    }
+
     public void addNewItemBtnClicked(){
         Stage stage = new Stage();
         stage.setTitle("Add New Item");
@@ -179,10 +192,44 @@ public class InventoryController implements Initializable {
 
             String fileName = file.getName();
             String fileType = fileName.substring(fileName.lastIndexOf("."));
+            System.out.println(fileType);
 
             if(file != null){
                 fileManager.save(file, fileType, inventory);
                 //calls list's save method to write into that file
+            }
+        }catch (Exception ex){
+            System.out.println("An error occurred.");
+        }
+    }
+
+    public void loadBtnClicked(){
+        Stage stage = (Stage) searchField.getScene().getWindow();
+
+        fileChooser.setTitle("Load Dialog");
+
+        //only accept csv files
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("TSV file", "*.txt"),
+                new FileChooser.ExtensionFilter("HTML file", "*.html"),
+                new FileChooser.ExtensionFilter("JSON file", "*.json"));
+
+        try {
+            File file = fileChooser.showOpenDialog(stage);
+            //sets a directory for future reference
+            fileChooser.setInitialDirectory(file.getParentFile());
+
+            String fileName = file.getName();
+            String fileType = fileName.substring(fileName.lastIndexOf("."));
+            System.out.println(fileType);
+
+            if(file != null){
+                //call list's load to get arraylist of items
+                //convert to observable list and sort by date and display in the table
+                //this.inventory = fileManager.load(file, fileType);
+                //inventory.getItems().removeAll(inventory.getItems());
+                //FXCollections.copy(inventory.getItems(), fileManager.load(file, fileType));
+                inventory.setItems(fileManager.load(file, fileType));
+                tableView.setItems(inventory.getItems());
             }
         }catch (Exception ex){
             System.out.println("An error occurred.");

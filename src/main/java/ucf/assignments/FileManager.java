@@ -4,10 +4,16 @@
  */
 package ucf.assignments;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+
+import java.io.*;
+import java.math.BigDecimal;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 public class FileManager {
 
@@ -18,11 +24,11 @@ public class FileManager {
         this.file = file;
         this.inventory = inventory;
 
-        if(fileType.equals("txt")){
+        if(fileType.equals(".txt")){
             saveAsTSV();
-        }else if(fileType.equals("html")){
+        }else if(fileType.equals(".html")){
             saveAsHTML();
-        }else if(fileType.equals("json")){
+        }else if(fileType.equals(".json")){
             saveAsJSON();
         }
     }
@@ -52,6 +58,10 @@ public class FileManager {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 
+
+            bw.write("<!DOCTYPE html>\n");
+            bw.write("<html>\n");
+            bw.write("<body>\n");
             bw.write("<table>\n");
             bw.write("<tr>\n");
             bw.write("<th>Name</th>\n");
@@ -67,7 +77,9 @@ public class FileManager {
                 bw.write("</tr>\n");
             }
 
-            bw.write("</table>");
+            bw.write("</table>\n");
+            bw.write("</body>\n");
+            bw.write("</html>\n");
             bw.close();
 
         } catch (IOException e) {
@@ -78,4 +90,87 @@ public class FileManager {
     public void saveAsJSON(){
 
     }
+
+    public ObservableList<Item> load(File file, String fileType){
+        this.file = file;
+        this.inventory = new Inventory();
+
+        if(fileType.equals(".txt")){
+            return loadTSV();
+        }else if(fileType.equals(".html")){
+            return loadHTML();
+        }else if(fileType.equals(".json")){
+            return loadJSON();
+        }
+
+        return null;
+    }
+
+    public ObservableList<Item> loadTSV(){
+        ObservableList<Item> fileItems = FXCollections.observableArrayList();
+
+        try {
+            //use a bufferedreader for reading the csv file
+            BufferedReader br = new BufferedReader(new FileReader(file));
+
+            String line = "";
+            line = br.readLine(); //ignores the headings
+            while((line = br.readLine()) != null){
+                String[] values = line.split("\t"); //to separate values
+
+                System.out.println(values); //console message
+
+
+                //add into fileItems
+                fileItems.add(new Item(values[0], values[1], new BigDecimal(values[2])));
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return fileItems;
+
+    }
+
+    public ObservableList<Item> loadHTML(){
+        ObservableList<Item> fileItems = FXCollections.observableArrayList();
+
+        try {
+            //use a bufferedreader for reading the csv file
+            BufferedReader br = new BufferedReader(new FileReader(file));
+
+            String line = "";
+            while((line = br.readLine()) != null){
+                if(line.startsWith("<td>")) {
+                    String name = line.substring(4, line.indexOf("</td>"));
+                    System.out.println(name);
+                    line = br.readLine();
+                    String serialNumber = line.substring(4, line.indexOf("</td>"));
+                    System.out.println(serialNumber);
+                    line = br.readLine();
+                    BigDecimal value = new BigDecimal(line.substring(4, line.indexOf("</td>")));
+                    System.out.println(value);
+
+                    //add into fileItems
+                    fileItems.add(new Item(name, serialNumber, value));
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return fileItems;
+    }
+
+    public ObservableList<Item> loadJSON(){
+return null;
+    }
 }
+
+    /*String fileDataString = Files.readAllLines(Paths.get(fileName), Charset.forName("UTF-8")).stream().collect(Collectors.joining("\n"));
+
+    String title = StringUtils.substringBetween(fileDataString, "<title>", "</title>"));*/
