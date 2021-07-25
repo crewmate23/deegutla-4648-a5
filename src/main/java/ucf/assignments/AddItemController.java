@@ -98,7 +98,7 @@ public class AddItemController {
             }
         }
 
-        if(serialNumber.length() < 10){
+        if(serialNumber.length() != 10){
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setHeaderText("Invalid Serial Number");
             errorAlert.setContentText("Item's serial number must be 10 characters XXXXXXXXXX.");

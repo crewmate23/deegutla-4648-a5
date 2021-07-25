@@ -151,7 +151,7 @@ public class InventoryController implements Initializable {
 
     public void newBtnClicked(){
         inventory.getItems().removeAll();
-        tableView.refresh();
+        tableView.getItems().clear();
     }
 
     public void addNewItemBtnClicked(){
@@ -296,11 +296,13 @@ public class InventoryController implements Initializable {
     public void changeValueCellEvent (TableColumn.CellEditEvent edittedCell){
         Item selectedItem = tableView.getSelectionModel().getSelectedItem();
         BigDecimal oldValue = selectedItem.getValue();
-        BigDecimal newValue;
+        String valueStr = edittedCell.getNewValue().toString();
+        BigDecimal newValue = null;
 
         //validate value field
         try{
-            newValue = new BigDecimal(edittedCell.getNewValue().toString());
+            if(valueStr != null)
+                newValue = new BigDecimal(valueStr);
         } catch (NumberFormatException ex){
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setHeaderText("Invalid Value");
