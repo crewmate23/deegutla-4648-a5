@@ -95,67 +95,17 @@ public class InventoryController implements Initializable {
         valueColumn.setSortable(true);
 
         addNewItemBtn.setOnAction(e -> addNewItemBtnClicked());
-        /*addNewItemBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                addNewItemBtnClicked(event);
-            }
-        });*/
-
         removeItemBtn.setOnAction(e -> removeItemBtnClicked());
-
         searchBtn.setOnAction(e -> searchBtnClicked());
-
         saveBtn.setOnAction(e -> saveBtnClicked());
-
         loadBtn.setOnAction(e -> loadBtnClicked());
-
         newBtn.setOnAction(e -> newBtnClicked());
-
         searchField.setOnMouseExited(e -> clearSearch());
-        /*removeItemBtn.setOnAction(new EventHandler<ActionEvent>(){
-            @Override
-            public void handle(ActionEvent event){
-                removeItemBtnClicked(event);
-            }
-        });*/
-
-        //nameColumn.setOnEditCommit(e -> changeNameCellEvent());
 
         tableView.setItems(inventory.getItems());
 
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tableView.setEditable(true);
-
-
-        /*FilteredList<Item> itemFilteredList = new FilteredList<>(inventory.getItems(), b -> true);
-
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            itemFilteredList.setPredicate(item -> {
-
-                if(newValue == null || newValue.isEmpty()){
-                    return true;
-                }
-
-                String lowerCaseSearch = newValue.toLowerCase();
-
-                if(item.getName().toLowerCase().indexOf(lowerCaseSearch) != -1){
-                    return true;
-                }else if(item.getSerialNumber().toLowerCase().indexOf(lowerCaseSearch) != -1){
-                    return true;
-                }else{
-                    return false;
-                }
-            });
-        });
-
-        *//*SortedList<Item> itemSortedList = new SortedList<>(itemFilteredList);
-
-        itemSortedList.comparatorProperty().bind(tableView.comparatorProperty());*//*
-        //ObservableList<Item> searchItems = FXCollections.observableArrayList();
-
-        FXCollections.copy(inventory.getItems(), itemFilteredList);
-        tableView.refresh();*/
 
         String newFolder = System.getProperty("user.home") + File.separator + "Desktop" + File.separator + "Inventory_Deegutla";
         File newDirectory = new File(newFolder);
@@ -240,11 +190,6 @@ public class InventoryController implements Initializable {
             System.out.println(fileType);
 
             if(file != null){
-                //call list's load to get arraylist of items
-                //convert to observable list and sort by date and display in the table
-                //this.inventory = fileManager.load(file, fileType);
-                //inventory.getItems().removeAll(inventory.getItems());
-                //FXCollections.copy(inventory.getItems(), fileManager.load(file, fileType));
                 inventory.setItems(fileManager.load(file, fileType));
                 tableView.setItems(inventory.getItems());
             }
@@ -253,12 +198,10 @@ public class InventoryController implements Initializable {
         }
     }
 
-    public void searchBtnClicked(){
+    public Item searchBtnClicked(){
         String search = searchField.getText();
 
-        ObservableList<Item> searchItems = FXCollections.observableArrayList();
-
-        //List<String> searchWordsArray = Arrays.asList(search.trim().split(" "));
+        final Item[] searchItem = new Item[1];
 
         tableView.getItems().stream()
                 .filter(item -> item.getName().contains(search))
@@ -266,6 +209,7 @@ public class InventoryController implements Initializable {
                 .ifPresent(item -> {
                     tableView.getSelectionModel().select(item);
                     tableView.scrollTo(item);
+                    searchItem[0] = item;
                 });
 
         tableView.getItems().stream()
@@ -274,8 +218,17 @@ public class InventoryController implements Initializable {
                 .ifPresent(item -> {
                     tableView.getSelectionModel().select(item);
                     tableView.scrollTo(item);
+                    searchItem[0] = item;
                 });
-        //tableView.setItems(searchItems);
+
+        if(searchItem[0] == null){
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("Item not found");
+            errorAlert.setContentText("No matches.");
+            errorAlert.showAndWait();
+        }
+
+        return searchItem[0];
     }
 
     public void clearSearch(){
