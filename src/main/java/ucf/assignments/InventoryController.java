@@ -90,6 +90,8 @@ public class InventoryController implements Initializable {
         }*/
         valueColumn.setCellFactory(TextFieldTableCell.forTableColumn(new BigDecimalStringConverter()));
 
+
+
         addNewItemBtn.setOnAction(e -> addNewItemBtnClicked());
         /*addNewItemBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -107,6 +109,8 @@ public class InventoryController implements Initializable {
         loadBtn.setOnAction(e -> loadBtnClicked());
 
         newBtn.setOnAction(e -> newBtnClicked());
+
+        searchField.setOnMouseExited(e -> clearSearch());
         /*removeItemBtn.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event){
@@ -158,6 +162,7 @@ public class InventoryController implements Initializable {
         fileChooser.setInitialDirectory(newDirectory);
 
     }
+
 
     public void newBtnClicked(){
         inventory.getItems().removeAll();
@@ -251,29 +256,28 @@ public class InventoryController implements Initializable {
 
         ObservableList<Item> searchItems = FXCollections.observableArrayList();
 
-        List<String> searchWordsArray = Arrays.asList(search.trim().split(" "));
+        //List<String> searchWordsArray = Arrays.asList(search.trim().split(" "));
 
-        for(String searchWord : searchWordsArray){
-            if(findItem(searchWord) != null){
-                FXCollections.copy(searchItems, findItem(searchWord));
-            }
-        }
+        tableView.getItems().stream()
+                .filter(item -> item.getName().equals(search))
+                .findAny()
+                .ifPresent(item -> {
+                    tableView.getSelectionModel().select(item);
+                    tableView.scrollTo(item);
+                });
 
-        tableView.setItems(searchItems);
+        tableView.getItems().stream()
+                .filter(item -> item.getSerialNumber().equals(search))
+                .findAny()
+                .ifPresent(item -> {
+                    tableView.getSelectionModel().select(item);
+                    tableView.scrollTo(item);
+                });
+        //tableView.setItems(searchItems);
     }
 
-    public ObservableList<Item> findItem(String searchWord){
-        ObservableList<Item> foundItems = FXCollections.observableArrayList();
-
-        for(Item item : inventory.getItems()){
-            if(item.getName().contains(searchWord.toLowerCase())){
-                foundItems.add(item);
-            }else if(item.getSerialNumber().contains(searchWord.toLowerCase())){
-                foundItems.add(item);
-            }
-        }
-
-        return foundItems;
+    public void clearSearch(){
+        tableView.getSelectionModel().clearSelection();
     }
 
     public void changeNameCellEvent(TableColumn.CellEditEvent edittedCell){
