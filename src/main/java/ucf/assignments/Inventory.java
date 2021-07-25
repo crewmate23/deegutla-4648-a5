@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 
 public class Inventory {
 
@@ -44,11 +45,11 @@ public class Inventory {
 
     public boolean checkSerialNumber(String serialNumber){
         for(Item item : items){
-            if(serialNumber.equals(item.getSerialNumber()))
-                return false;
+            if(item.getSerialNumber().equals(serialNumber))
+                return true;
         }
 
-        return true;
+        return false;
     }
 
     public Item findItemBySerial(String serialNumber){
@@ -72,4 +73,47 @@ public class Inventory {
     public void editValue(Item selectedItem, BigDecimal newValue){
         selectedItem.setValue(newValue);
     }
+
+    public ObservableList<Item> sortByName(){
+        ObservableList<Item> sortedNames = FXCollections.observableArrayList();
+        sortedNames = items;
+
+        FXCollections.sort(sortedNames, new Comparator<Item>() {
+            @Override
+            public int compare(Item o1, Item o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
+        return sortedNames;
+    }
+
+    public ObservableList<Item> sortBySerialNumber(){
+        ObservableList<Item> sortedNames = FXCollections.observableArrayList();
+        sortedNames = items;
+
+        FXCollections.sort(sortedNames, new Comparator<Item>() {
+            @Override
+            public int compare(Item o1, Item o2) {
+                return o1.getSerialNumber().compareTo(o2.getSerialNumber());
+            }
+        });
+
+        return sortedNames;
+    }
+
+    public ObservableList<Item> sortByValue(){
+        ObservableList<Item> sortedValues = FXCollections.observableArrayList();
+        sortedValues = items;
+
+        FXCollections.sort(sortedValues, new Comparator<Item>() {
+            @Override
+            public int compare(Item o1, Item o2) {
+                return o1.getValue().compareTo(o2.getValue());
+            }
+        });
+
+        return sortedValues;
+    }
+
 }

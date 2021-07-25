@@ -4,11 +4,7 @@
  */
 package ucf.assignments;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -49,7 +45,16 @@ public class InventoryController implements Initializable {
     @FXML
     private MenuItem newBtn;
     @FXML
+    private MenuItem quitBtn;
+    @FXML
     private TextField searchField;
+
+    @FXML
+    private MenuItem sortByName;
+    @FXML
+    private MenuItem sortBySerialNumber;
+    @FXML
+    private MenuItem sortByValue;
 
     //configure table and columns
     @FXML
@@ -77,15 +82,15 @@ public class InventoryController implements Initializable {
 
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         serialNumberColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        /*try{
+        try{
             valueColumn.setCellFactory(TextFieldTableCell.forTableColumn(new BigDecimalStringConverter()));
-        }catch (NumberFormatException ex){
+        } catch (NumberFormatException ex){
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setHeaderText("Invalid Value");
             errorAlert.setContentText("Item's value price must be number and format 0.00.");
             errorAlert.showAndWait();
-        }*/
-        valueColumn.setCellFactory(TextFieldTableCell.forTableColumn(new BigDecimalStringConverter()));
+        }
+        //valueColumn.setCellFactory(TextFieldTableCell.forTableColumn(new BigDecimalStringConverter()));
 
         nameColumn.setSortable(true);
         serialNumberColumn.setSortable(true);
@@ -97,7 +102,12 @@ public class InventoryController implements Initializable {
         saveBtn.setOnAction(e -> saveBtnClicked());
         loadBtn.setOnAction(e -> loadBtnClicked());
         newBtn.setOnAction(e -> newBtnClicked());
+        quitBtn.setOnAction(e -> quitBtnClicked());
         searchField.setOnMouseExited(e -> clearSearch());
+
+        sortByName.setOnAction(e -> sort("name"));
+        sortBySerialNumber.setOnAction(e -> sort("serialNumber"));
+        sortByValue.setOnAction(e -> sort("value"));
 
         tableView.setItems(inventory.getItems());
 
@@ -112,6 +122,28 @@ public class InventoryController implements Initializable {
 
     }
 
+    public void sort(String type){
+
+        if(type.equals("name")){
+            tableView.setItems(inventory.sortByName());
+            tableView.refresh();
+        }
+
+        if(type.equals("serialNumber")){
+            tableView.setItems(inventory.sortBySerialNumber());
+            tableView.refresh();
+        }
+
+        if(type.equals("value")){
+            tableView.setItems(inventory.sortByValue());
+            tableView.refresh();
+        }
+    }
+
+    public void quitBtnClicked(){
+        Stage stage = (Stage) searchField.getScene().getWindow();
+        stage.close();
+    }
 
     public void newBtnClicked(){
         inventory.getItems().removeAll();
@@ -198,17 +230,15 @@ public class InventoryController implements Initializable {
     public void searchBtnClicked(){
         String search = searchField.getText();
 
-        Item foundItem = inventory.findItemByName(search);
+        Item foundItem;
 
-        tableView.getSelectionModel().select(foundItem);
-        tableView.scrollTo(foundItem);
-
-        foundItem = inventory.findItemBySerial(search);
-
-        tableView.getSelectionModel().select(foundItem);
-        tableView.scrollTo(foundItem);
-
-        if(foundItem == null){
+        if((foundItem = inventory.findItemByName(search)) != null){
+            tableView.getSelectionModel().select(foundItem);
+            tableView.scrollTo(foundItem);
+        }else if((foundItem = inventory.findItemBySerial(search)) != null){
+            tableView.getSelectionModel().select(foundItem);
+            tableView.scrollTo(foundItem);
+        }else{
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setHeaderText("Item not found");
             errorAlert.setContentText("No matches.");
