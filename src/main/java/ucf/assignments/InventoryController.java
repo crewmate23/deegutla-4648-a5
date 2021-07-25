@@ -24,9 +24,6 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class InventoryController implements Initializable {
@@ -129,12 +126,12 @@ public class InventoryController implements Initializable {
     }
 
     public void removeItemBtnClicked(){
-        ObservableList<Item> selectedItems, allItems;
+        ObservableList<Item> selectedItems;
 
-        allItems = tableView.getItems();
         selectedItems = tableView.getSelectionModel().getSelectedItems();
 
-        allItems.removeAll(selectedItems);
+        inventory.removeItems(selectedItems);
+        tableView.refresh();
     }
 
     public void saveBtnClicked(){
@@ -198,37 +195,25 @@ public class InventoryController implements Initializable {
         }
     }
 
-    public Item searchBtnClicked(){
+    public void searchBtnClicked(){
         String search = searchField.getText();
 
-        final Item[] searchItem = new Item[1];
+        Item foundItem = inventory.findItemByName(search);
 
-        tableView.getItems().stream()
-                .filter(item -> item.getName().contains(search))
-                .findAny()
-                .ifPresent(item -> {
-                    tableView.getSelectionModel().select(item);
-                    tableView.scrollTo(item);
-                    searchItem[0] = item;
-                });
+        tableView.getSelectionModel().select(foundItem);
+        tableView.scrollTo(foundItem);
 
-        tableView.getItems().stream()
-                .filter(item -> item.getSerialNumber().contains(search))
-                .findAny()
-                .ifPresent(item -> {
-                    tableView.getSelectionModel().select(item);
-                    tableView.scrollTo(item);
-                    searchItem[0] = item;
-                });
+        foundItem = inventory.findItemBySerial(search);
 
-        if(searchItem[0] == null){
+        tableView.getSelectionModel().select(foundItem);
+        tableView.scrollTo(foundItem);
+
+        if(foundItem == null){
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setHeaderText("Item not found");
             errorAlert.setContentText("No matches.");
             errorAlert.showAndWait();
         }
-
-        return searchItem[0];
     }
 
     public void clearSearch(){
@@ -249,7 +234,7 @@ public class InventoryController implements Initializable {
             newName = oldName;
         }
 
-        selectedItem.setName(newName);
+        inventory.editName(selectedItem, newName);
     }
 
     public void changeSerialNumberCellEvent(TableColumn.CellEditEvent edittedCell){
@@ -257,19 +242,18 @@ public class InventoryController implements Initializable {
         String oldSerialNumber = selectedItem.getSerialNumber();
         String newSerialNumber = edittedCell.getNewValue().toString();
 
-        for(Item item : inventory.getItems()){
-            if(newSerialNumber.equals(item.getSerialNumber()) && !(item.equals(selectedItem))){
-                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                errorAlert.setHeaderText("Serial Number Exists");
-                errorAlert.setContentText("This serial number already exists in the inventory.");
-                errorAlert.showAndWait();
+        if(inventory.checkSerialNumber(newSerialNumber) && !(inventory.findItemBySerial(newSerialNumber).equals(selectedItem))) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("Serial Number Exists");
+            errorAlert.setContentText("This serial number already exists in the inventory.");
+            errorAlert.showAndWait();
 
-                newSerialNumber = oldSerialNumber;
-                //serialNumberColumn.setEditable(false);
-            }
+            newSerialNumber = oldSerialNumber;
+            //serialNumberColumn.setEditable(false);
         }
 
-        selectedItem.setSerialNumber(newSerialNumber);
+
+        inventory.editSerialNumber(selectedItem, newSerialNumber);
         tableView.refresh();
 
     }
@@ -292,13 +276,6 @@ public class InventoryController implements Initializable {
             newValue = oldValue;
         }
 
-        /*String regex = "\\d+";
-        if(!edittedCell.getNewValue().toString().matches(regex)){
-            selectedItem.setValue(oldValue);
-        }else{
-            selectedItem.setValue(new BigDecimal(edittedCell.getNewValue().toString()));
-        }*/
-
-        selectedItem.setValue(newValue);
+        inventory.editValue(selectedItem, newValue);
     }
 }

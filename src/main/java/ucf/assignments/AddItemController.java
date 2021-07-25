@@ -109,21 +109,19 @@ public class AddItemController {
             validInput = false;
         }
 
-        for(Item i: inventory.getItems()){
-            if(serialNumber.equals(i.getSerialNumber())){
-                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                errorAlert.setHeaderText("Serial Number Exists");
-                errorAlert.setContentText("This serial number exists already in the inventory.");
-                errorAlert.showAndWait();
+        if(inventory.checkSerialNumber(serialNumber)) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("Serial Number Exists");
+            errorAlert.setContentText("This serial number exists already in the inventory.");
+            errorAlert.showAndWait();
 
-                clearField(serialNumberField);
+            clearField(serialNumberField);
 
-                validInput = false;
-            }
+            validInput = false;
         }
 
         if(validInput){
-            inventory.getItems().add(new Item(name, serialNumber, value));
+            inventory.addItem(new Item(name, serialNumber, value));
 
             nameField.setPromptText("Name: ");
             nameField.clear();
