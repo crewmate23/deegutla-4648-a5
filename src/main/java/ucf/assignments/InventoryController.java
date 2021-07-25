@@ -90,7 +90,9 @@ public class InventoryController implements Initializable {
         }*/
         valueColumn.setCellFactory(TextFieldTableCell.forTableColumn(new BigDecimalStringConverter()));
 
-
+        nameColumn.setSortable(true);
+        serialNumberColumn.setSortable(true);
+        valueColumn.setSortable(true);
 
         addNewItemBtn.setOnAction(e -> addNewItemBtnClicked());
         /*addNewItemBtn.setOnAction(new EventHandler<ActionEvent>() {
