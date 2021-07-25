@@ -37,6 +37,8 @@ public class InventoryController implements Initializable {
 
     FileChooser fileChooser = new FileChooser();
 
+    BigDecimalStringConverter converter = new BigDecimalStringConverter();
+
     @FXML
     private Button addNewItemBtn;
     @FXML
@@ -78,6 +80,14 @@ public class InventoryController implements Initializable {
 
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         serialNumberColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        /*try{
+            valueColumn.setCellFactory(TextFieldTableCell.forTableColumn(new BigDecimalStringConverter()));
+        }catch (NumberFormatException ex){
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("Invalid Value");
+            errorAlert.setContentText("Item's value price must be number and format 0.00.");
+            errorAlert.showAndWait();
+        }*/
         valueColumn.setCellFactory(TextFieldTableCell.forTableColumn(new BigDecimalStringConverter()));
 
         addNewItemBtn.setOnAction(e -> addNewItemBtnClicked());
@@ -268,7 +278,19 @@ public class InventoryController implements Initializable {
 
     public void changeNameCellEvent(TableColumn.CellEditEvent edittedCell){
         Item selectedItem = tableView.getSelectionModel().getSelectedItem();
-        selectedItem.setName(edittedCell.getNewValue().toString());
+        String oldName = selectedItem.getName();
+        String newName = edittedCell.getNewValue().toString();
+
+        if(newName.length() < 2 && newName.length() > 256){
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("Invalid Name");
+            errorAlert.setContentText("Item's name must be between 2 and 256 characters.");
+            errorAlert.showAndWait();
+
+            newName = oldName;
+        }
+
+        selectedItem.setName(newName);
     }
 
     public void changeSerialNumberCellEvent(TableColumn.CellEditEvent edittedCell){
@@ -296,13 +318,12 @@ public class InventoryController implements Initializable {
     public void changeValueCellEvent (TableColumn.CellEditEvent edittedCell){
         Item selectedItem = tableView.getSelectionModel().getSelectedItem();
         BigDecimal oldValue = selectedItem.getValue();
-        String valueStr = edittedCell.getNewValue().toString();
-        BigDecimal newValue = null;
+        BigDecimal newValue = converter.fromString(edittedCell.getNewValue().toString());
 
         //validate value field
         try{
-            if(valueStr != null)
-                newValue = new BigDecimal(valueStr);
+            if(edittedCell.getNewValue().toString() != null)
+                newValue = new BigDecimal(edittedCell.getNewValue().toString());
         } catch (NumberFormatException ex){
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setHeaderText("Invalid Value");
