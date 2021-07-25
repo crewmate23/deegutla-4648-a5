@@ -32,15 +32,6 @@
                         <CheckMenuItem mnemonicParsing="false" text="Sort by Value" />
                     </items>
                 </Menu>
-            <Menu mnemonicParsing="false" text="Find">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Search">
-                     <graphic>
-                        <TextField />
-                     </graphic>
-                  </MenuItem>
-               </items>
-            </Menu>
             </menus>
         </MenuBar>
     </top>
@@ -61,10 +52,20 @@
          <children>
             <Button fx:id="addNewItemBtn" mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Add Item">
                <HBox.margin>
-                  <Insets left="10.0" top="10.0" />
+                  <Insets left="20.0" top="10.0" />
                </HBox.margin>
             </Button>
             <Button fx:id="removeItemBtn" mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Remove Item">
+               <HBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+            <TextField fx:id="searchField" prefHeight="31.0" prefWidth="222.0" promptText="Search Box">
+               <HBox.margin>
+                  <Insets left="10.0" top="10.0" />
+               </HBox.margin>
+            </TextField>
+            <Button fx:id="searchBtn" mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Search">
                <HBox.margin>
                   <Insets left="10.0" top="10.0" />
                </HBox.margin>

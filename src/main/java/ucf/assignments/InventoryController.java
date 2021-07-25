@@ -4,7 +4,11 @@
  */
 package ucf.assignments;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -16,6 +20,9 @@ import javafx.util.converter.BigDecimalStringConverter;
 
 import java.math.BigDecimal;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class InventoryController implements Initializable {
@@ -28,6 +35,10 @@ public class InventoryController implements Initializable {
     private Button addNewItemBtn;
     @FXML
     private Button removeItemBtn;
+    @FXML
+    private Button searchBtn;
+    @FXML
+    private TextField searchField;
 
     //configure table and columns
     @FXML
@@ -65,6 +76,8 @@ public class InventoryController implements Initializable {
         });*/
 
         removeItemBtn.setOnAction(e -> removeItemBtnClicked());
+
+        searchBtn.setOnAction(e -> searchBtnClicked());
         /*removeItemBtn.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event){
@@ -78,6 +91,36 @@ public class InventoryController implements Initializable {
 
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tableView.setEditable(true);
+
+
+        /*FilteredList<Item> itemFilteredList = new FilteredList<>(inventory.getItems(), b -> true);
+
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            itemFilteredList.setPredicate(item -> {
+
+                if(newValue == null || newValue.isEmpty()){
+                    return true;
+                }
+
+                String lowerCaseSearch = newValue.toLowerCase();
+
+                if(item.getName().toLowerCase().indexOf(lowerCaseSearch) != -1){
+                    return true;
+                }else if(item.getSerialNumber().toLowerCase().indexOf(lowerCaseSearch) != -1){
+                    return true;
+                }else{
+                    return false;
+                }
+            });
+        });
+
+        *//*SortedList<Item> itemSortedList = new SortedList<>(itemFilteredList);
+
+        itemSortedList.comparatorProperty().bind(tableView.comparatorProperty());*//*
+        //ObservableList<Item> searchItems = FXCollections.observableArrayList();
+
+        FXCollections.copy(inventory.getItems(), itemFilteredList);
+        tableView.refresh();*/
 
     }
 
@@ -95,6 +138,36 @@ public class InventoryController implements Initializable {
         selectedItems = tableView.getSelectionModel().getSelectedItems();
 
         allItems.removeAll(selectedItems);
+    }
+
+    public void searchBtnClicked(){
+        String search = searchField.getText();
+
+        ObservableList<Item> searchItems = FXCollections.observableArrayList();
+
+        List<String> searchWordsArray = Arrays.asList(search.trim().split(" "));
+
+        for(String searchWord : searchWordsArray){
+            if(findItem(searchWord) != null){
+                FXCollections.copy(searchItems, findItem(searchWord));
+            }
+        }
+
+        tableView.setItems(searchItems);
+    }
+
+    public ObservableList<Item> findItem(String searchWord){
+        ObservableList<Item> foundItems = FXCollections.observableArrayList();
+
+        for(Item item : inventory.getItems()){
+            if(item.getName().contains(searchWord.toLowerCase())){
+                foundItems.add(item);
+            }else if(item.getSerialNumber().contains(searchWord.toLowerCase())){
+                foundItems.add(item);
+            }
+        }
+
+        return foundItems;
     }
 
     public void changeNameCellEvent(TableColumn.CellEditEvent edittedCell){
