@@ -14,12 +14,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.BigDecimalStringConverter;
 
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -31,12 +35,16 @@ public class InventoryController implements Initializable {
     private SceneManager sceneManager;
     private FileManager fileManager;
 
+    FileChooser fileChooser = new FileChooser();
+
     @FXML
     private Button addNewItemBtn;
     @FXML
     private Button removeItemBtn;
     @FXML
     private Button searchBtn;
+    @FXML
+    private MenuItem saveBtn;
     @FXML
     private TextField searchField;
 
@@ -55,6 +63,7 @@ public class InventoryController implements Initializable {
     public InventoryController(Inventory inventory, SceneManager sceneManager){
         this.inventory = inventory;
         this.sceneManager = sceneManager;
+        this.fileManager = new FileManager();
     }
 
     @Override
@@ -78,6 +87,8 @@ public class InventoryController implements Initializable {
         removeItemBtn.setOnAction(e -> removeItemBtnClicked());
 
         searchBtn.setOnAction(e -> searchBtnClicked());
+
+        saveBtn.setOnAction(e -> saveBtnClicked());
         /*removeItemBtn.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event){
@@ -122,6 +133,12 @@ public class InventoryController implements Initializable {
         FXCollections.copy(inventory.getItems(), itemFilteredList);
         tableView.refresh();*/
 
+        String newFolder = System.getProperty("user.home") + File.separator + "Desktop" + File.separator + "Inventory_Deegutla";
+        File newDirectory = new File(newFolder);
+        newDirectory.mkdirs();
+
+        fileChooser.setInitialDirectory(newDirectory);
+
     }
 
     public void addNewItemBtnClicked(){
@@ -138,6 +155,38 @@ public class InventoryController implements Initializable {
         selectedItems = tableView.getSelectionModel().getSelectedItems();
 
         allItems.removeAll(selectedItems);
+    }
+
+    public void saveBtnClicked(){
+        Stage stage = (Stage) searchField.getScene().getWindow();
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH.mm.ss");
+        LocalDateTime now = LocalDateTime.now();
+        String date = dtf.format(now);
+
+        fileChooser.setTitle("Save Dialog");
+        fileChooser.setInitialFileName("Inventory_" + date);
+
+
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("TSV file", "*.txt"),
+                new FileChooser.ExtensionFilter("HTML file", "*.html"),
+                new FileChooser.ExtensionFilter("JSON file", "*.json"));
+
+        try {
+            File file = fileChooser.showSaveDialog(stage);
+            //sets a directory for future reference
+            fileChooser.setInitialDirectory(file.getParentFile());
+
+            String fileName = file.getName();
+            String fileType = fileName.substring(fileName.lastIndexOf("."));
+
+            if(file != null){
+                fileManager.save(file, fileType, inventory);
+                //calls list's save method to write into that file
+            }
+        }catch (Exception ex){
+            System.out.println("An error occurred.");
+        }
     }
 
     public void searchBtnClicked(){
