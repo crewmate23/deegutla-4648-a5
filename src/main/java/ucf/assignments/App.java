@@ -24,6 +24,8 @@ public class App extends Application {
         sceneManager.loadScenes();
 
         Scene scene = sceneManager.getScene("InventoryScene");
+        //scene.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
+
         primaryStage.setScene(scene);
         primaryStage.setTitle("Inventory Items");
         primaryStage.show();

@@ -1,0 +1,54 @@
+.menu-bar {
+    -fx-background-color: linear-gradient(to bottom, #33f2c2, #77f7d7);
+}
+.menu-bar .label {
+    -fx-font-size: 13px;
+    -fx-font-family: "Sans-serif";
+    -fx-text-fill: black;
+    -fx-padding: 8px;
+
+}
+.menu-bar .menu-button:hover, .menu-bar .menu-button:focused, .menu-bar .menu-button:showing {
+    -fx-background-color: linear-gradient(to bottom, #04d19f, #33f2c2);;
+    -fx-text-fill: white;
+}
+
+.menu-item {
+    -fx-padding: 0.0em 0.0em 0.0em 0.0em;
+    -fx-text-fill: black;
+    -fx-background: linear-gradient(to bottom, #33f2c2, #77f7d7);
+}
+.menu-item .label{
+    -fx-font: 12px Sans-serif;
+    -fx-text-fill: black;
+}
+.menu-item .label:hover{
+    -fx-font-size: 12px;
+    -fx-background-color: linear-gradient(to bottom, #04d19f, #33f2c2);;
+    -fx-text-fill: white;
+}
+
+.button{
+    -fx-background-color: linear-gradient(to bottom, #33f2c2, #77f7d7);
+    -fx-font: 13px Sans-serif;
+}
+
+.button:hover{
+    -fx-font: 13px Sans-serif;
+    -fx-background-color: linear-gradient(to bottom, #04d19f, #33f2c2);
+}
+
+.table-view{
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header{
+    -fx-background-color: linear-gradient(to bottom, #33f2c2, #77f7d7);
+    -fx-background-radius: 3px 3px 0px 0px;
+    -fx-background-insets: 0 2px 0 0;
+    -fx-padding: 0 0 2px 0;
+}
+
+.pane{
+    -fx-background-color: linear-gradient(to bottom, #33f2c2, #77f7d7);
+}

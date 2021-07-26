@@ -7,21 +7,21 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="239.0" prefWidth="435.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="205.0" prefWidth="436.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TextField fx:id="nameField" layoutX="15.0" layoutY="85.0" prefHeight="35.0" prefWidth="407.0" promptText="Name:" />
-      <TextField fx:id="serialNumberField" layoutX="15.0" layoutY="131.0" prefHeight="35.0" prefWidth="219.0" promptText="Serial Number: XXXXXXXXXX" />
-      <TextField fx:id="valueField" layoutX="243.0" layoutY="131.0" prefHeight="35.0" prefWidth="179.0" promptText="Value: $0.00" />
-      <Pane prefHeight="60.0" prefWidth="436.0" style="-fx-background-color: #0240f0;">
+      <TextField fx:id="nameField" layoutX="15.0" layoutY="52.0" prefHeight="35.0" prefWidth="407.0" promptText="Name:" />
+      <TextField fx:id="serialNumberField" layoutX="14.0" layoutY="102.0" prefHeight="35.0" prefWidth="219.0" promptText="Serial Number: XXXXXXXXXX" />
+      <TextField fx:id="valueField" layoutX="243.0" layoutY="102.0" prefHeight="35.0" prefWidth="179.0" promptText="Value: $0.00" />
+      <Pane prefHeight="36.0" prefWidth="436.0" styleClass="pane" stylesheets="@stylesheet.css">
          <children>
-            <Text fill="WHITE" layoutX="14.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add an Item">
+            <Text layoutX="14.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add an Item">
                <font>
-                  <Font size="33.0" />
+                  <Font name="SansSerif Regular" size="16.0" />
                </font>
             </Text>
          </children>
       </Pane>
-      <Button fx:id="addItemBtn" layoutX="305.0" layoutY="190.0" mnemonicParsing="false" onAction="#addItemBtnClicked" prefHeight="35.0" prefWidth="117.0" text="Add Item" />
-      <Button cancelButton="true" layoutX="15.0" layoutY="190.0" mnemonicParsing="false" onAction="#cancelBtnClicked" prefHeight="35.0" prefWidth="117.0" text="Cancel" />
+      <Button fx:id="addItemBtn" layoutX="305.0" layoutY="155.0" mnemonicParsing="false" onAction="#addItemBtnClicked" prefHeight="35.0" prefWidth="117.0" stylesheets="@stylesheet.css" text="Add Item" />
+      <Button cancelButton="true" layoutX="15.0" layoutY="155.0" mnemonicParsing="false" onAction="#cancelBtnClicked" prefHeight="35.0" prefWidth="117.0" stylesheets="@stylesheet.css" text="Cancel" />
    </children>
 </AnchorPane>
