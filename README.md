@@ -14,6 +14,7 @@
 - To edit an item, double click on cell you want to edit
 - A textfield inside the cell shows up
 - Edit the item's name, serial column, and/or value by double clicking on its cell
+- **Please enter valid input such as number for value and string for name and serial number**
 - After you made changes, click "Enter" to update item's data
 
 ###Remove an Item
