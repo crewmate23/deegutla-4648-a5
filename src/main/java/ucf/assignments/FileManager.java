@@ -12,8 +12,6 @@ import javafx.collections.ObservableList;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class FileManager {
 
@@ -33,7 +31,7 @@ public class FileManager {
         }
     }
 
-    public void saveAsTSV(){
+    private void saveAsTSV(){
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 
@@ -52,7 +50,7 @@ public class FileManager {
         }
     }
 
-    public void saveAsHTML(){
+    private void saveAsHTML(){
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 
@@ -85,7 +83,7 @@ public class FileManager {
         }
     }
 
-    public void saveAsJSON(){
+    private void saveAsJSON(){
 
         Gson gson = new Gson();
 
@@ -124,7 +122,7 @@ public class FileManager {
         return null;
     }
 
-    public ObservableList<Item> loadTSV(){
+    private ObservableList<Item> loadTSV(){
         ObservableList<Item> fileItems = FXCollections.observableArrayList();
 
         try {
@@ -153,7 +151,7 @@ public class FileManager {
 
     }
 
-    public ObservableList<Item> loadHTML(){
+    private ObservableList<Item> loadHTML(){
         ObservableList<Item> fileItems = FXCollections.observableArrayList();
 
         try {
@@ -184,7 +182,7 @@ public class FileManager {
         return fileItems;
     }
 
-    public ObservableList<Item> loadJSON(){
+    private ObservableList<Item> loadJSON(){
         ObservableList<Item> fileItems = FXCollections.observableArrayList();
 
         try {

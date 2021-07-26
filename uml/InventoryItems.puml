@@ -14,35 +14,66 @@ class SceneManager{
 }
 
 class InventoryController{
-    model: Inventory
-    scene: SceneManager
-    fileManager: FileManager
-    fileChooser: FileChooser
+    'private instance variables
+    -inventory: Inventory
+    -scene: SceneManager
+    -fileManager: FileManager
+    -fileChooser: FileChooser
 
-    'add item btn
-    +addItemBtnClicked(ActionEvent event)
-    'remove item btn
-    +removeItemBtnClicked(ActionEvent event)
-    'search btn
-    +searchBtnClicked(ActionEvent event)
+    -addNewItemBtn: Button
+    -removeItemBtn: Button
+    -searchBtn: Button
+    -saveBtn: MenuItem
+    -loadBtn: MenuItem
+    -newBtn: MenuItem
+    -quitBtn: MenuItem
+    -sortByName: MenuItem
+    -sortBySerialNumber: MenuItem
+    -sortByValue: MenuItem
+    -searchField: TextField
 
-    'edit table
-    +edit(ActionEvent event)
+    -tableView: TableView<Item>
+    -nameColumn: TableColumn<Item, String>
+    -serialNumberColumn: TableColumn<Item, String>
+    -valueColumn: TableColumn<Item, BigDecimal>
 
-    'file manager functions
-    +saveAsClicked(ActionEvent event)
-    +loadClicked(ActionEvent event)
+    'constructor
+    +InventoryController(Inventory, SceneManager)
+    'methods
+    +initialize()
+    +sort(String)
+    +clearSearch()
+    'event handlers
+    +quitBtnClicked()
+    +newBtnClicked()
+    +addNewItemBtnClicked()
+    +removeItemBtnClicked()
+    +saveBtnClicked()
+    +loadBtnClicked()
+    +searchBtnClicked()
 
-
-
+    'table editing within cell methods
+    +changeNameCellEvent()
+    +changeSerialNumberCellEvent()
+    +changeValueCellEvent()
 }
 
 class AddItemController{
-    model: Inventory
+    inventory: Inventory
     scene: SceneManager
 
+    -nameField: TextField
+    -serialNumberField: TextField
+    -valueField: TextField
+
+    'constructor
+    +AddItemController(Inventory, SceneManager)
     'add item btn
     +addItemBtnClicked(ActionEvent event)
+    +cancelBtnClicked(ActionEvent event)
+
+    'helper
+    -clearField(TextField)
 }
 
 class Inventory{
@@ -53,7 +84,22 @@ class Inventory{
     'getter
     +getItems(): ObservableList<Item>
     'setter
-    +setItems(ObservableList<Item>
+    +setItems(ObservableList<Item>)
+
+    'helpers
+    +removeItems(ObservableList<Item>)
+    +addItem(Item)
+    +editName(Item, String)
+    +editSerialNumber(Item, String)
+    +editValue(Item, BigDecimal)
+    +checkSerialNumber(String): boolean
+    +findItemBySerial(String): Item
+    +findItemByName(String): Item
+
+    'sort functions
+    +sortByName(): ObservableList<Item>
+    +sortBySerialNumber(): ObservableList<Item>
+    +sortByValue(): ObservableList<Item>
 
 }
 
@@ -61,44 +107,58 @@ class Item{
     'private instance variables
     -name: SimpleStringProperty
     -serial: SimpleStringProperty
-    -value: SimpleDoubleProperty
+    -value: BigDecimal
 
     'constructor
     +Item(String, String, Double)
 
     'getters
     +getName(): String
-    +getSerial(): String
-    +getValue(): double
+    +getSerialNumber(): String
+    +getValue(): BigDecimal
 
     'setters
     +setName(String)
-    +setSerial(String)
-    +setValue(double)
+    +setSerialNumber(String)
+    +setValue(BigDecimal)
 }
 
 class FileManager{
+    file: File
+    inventory: Inventory
+
     'constructor
     +FileManager()
 
+    +save(File, String, Inventory)
+
     'save
-    +saveAsTSV(File, Inventory)
-    +saveAsHTML(File, Inventory)
-    +saveAsJSON(File, Inventory)
+    -saveAsTSV(File, Inventory)
+    -saveAsHTML(File, Inventory)
+    -saveAsJSON(File, Inventory)
+
+    +load(File, String): ObservableList<Item>
 
     'load
-    +loadTSV(File): Inventory
-    +loadHTML(File): Inventory
-    +loadJSON(File): Inventory
+    -loadTSV(File): Inventory
+    -loadHTML(File): Inventory
+    -loadJSON(File): Inventory
 }
 
 org.javafx.Application <|- App
 App -- SceneManager
-SceneManager -- InventoryController
+SceneManager --- InventoryController
 InventoryController -- FileManager
-SceneManager -- AddItemController
+SceneManager --- AddItemController
 InventoryController *-> Inventory
 AddItemController *--> Inventory
 Inventory *--> Item
+
+note "Integrates InventoryItems.fxml" as N1
+note "Integrates AddItem.fxml" as N2
+
+InventoryController . N1
+InventoryController .. N2
+AddItemController .. N2
 
 @enduml

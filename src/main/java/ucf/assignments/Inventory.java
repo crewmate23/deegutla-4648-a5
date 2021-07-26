@@ -43,6 +43,10 @@ public class Inventory {
         selectedItem.setSerialNumber(newSerialNumber);
     }
 
+    public void editValue(Item selectedItem, BigDecimal newValue){
+        selectedItem.setValue(newValue);
+    }
+
     public boolean checkSerialNumber(String serialNumber){
         for(Item item : items){
             if(serialNumber.equals(item.getSerialNumber()))
@@ -68,10 +72,6 @@ public class Inventory {
         }
 
         return null;
-    }
-
-    public void editValue(Item selectedItem, BigDecimal newValue){
-        selectedItem.setValue(newValue);
     }
 
     public ObservableList<Item> sortByName(){

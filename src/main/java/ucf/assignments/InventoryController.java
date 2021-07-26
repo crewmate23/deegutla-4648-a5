@@ -28,7 +28,7 @@ public class InventoryController implements Initializable {
     private SceneManager sceneManager;
     private FileManager fileManager;
 
-    FileChooser fileChooser = new FileChooser();
+    private FileChooser fileChooser = new FileChooser();
 
     BigDecimalStringConverter converter = new BigDecimalStringConverter();
 
