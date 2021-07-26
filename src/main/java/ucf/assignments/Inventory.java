@@ -45,7 +45,7 @@ public class Inventory {
 
     public boolean checkSerialNumber(String serialNumber){
         for(Item item : items){
-            if(item.getSerialNumber().equals(serialNumber))
+            if(serialNumber.equals(item.getSerialNumber()))
                 return true;
         }
 
@@ -54,7 +54,7 @@ public class Inventory {
 
     public Item findItemBySerial(String serialNumber){
         for(Item item : items){
-            if(serialNumber.equals(item.getSerialNumber()))
+            if(serialNumber.equalsIgnoreCase(item.getSerialNumber()))
                 return item;
         }
 
@@ -63,7 +63,7 @@ public class Inventory {
 
     public Item findItemByName(String name){
         for(Item item : items){
-            if(name.equals(item.getName()))
+            if(name.equalsIgnoreCase(item.getName()))
                 return item;
         }
 
@@ -81,7 +81,7 @@ public class Inventory {
         FXCollections.sort(sortedNames, new Comparator<Item>() {
             @Override
             public int compare(Item o1, Item o2) {
-                return o1.getName().compareTo(o2.getName());
+                return o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase());
             }
         });
 
@@ -95,7 +95,7 @@ public class Inventory {
         FXCollections.sort(sortedNames, new Comparator<Item>() {
             @Override
             public int compare(Item o1, Item o2) {
-                return o1.getSerialNumber().compareTo(o2.getSerialNumber());
+                return o1.getSerialNumber().toLowerCase().compareTo(o2.getSerialNumber().toLowerCase());
             }
         });
 

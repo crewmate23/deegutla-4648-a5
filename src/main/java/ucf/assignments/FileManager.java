@@ -37,9 +37,7 @@ public class FileManager {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 
-            bw.write("Name\t");
-            bw.write("Serial Number\t");
-            bw.write("Value\t\n");
+            bw.write("Name\tSerial Number\tValue\t\n");
 
             for(Item item: inventory.getItems()){
                 bw.write(item.getName() + "\t");
